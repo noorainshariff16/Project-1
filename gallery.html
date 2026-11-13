@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090b18" />
+  <title>Gallery — A Little Spark</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+    :root { color-scheme:dark; --ink:#f6f5ff; --muted:#a8a8c2; --cyan:#67e8f9; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; overflow-x:hidden; color:var(--ink); font-family:'DM Sans',sans-serif; background:radial-gradient(ellipse at 50% 25%,#202047 0%,#101225 47%,#090b18 82%); }
+    .stars { position:fixed; inset:0; pointer-events:none; opacity:.42; background-image:radial-gradient(1px 1px at 12% 22%,#fff 99%,transparent),radial-gradient(1px 1px at 79% 16%,#bdb7ff 99%,transparent),radial-gradient(1.5px 1.5px at 87% 72%,#fff 99%,transparent),radial-gradient(1px 1px at 24% 78%,#a5f3fc 99%,transparent),radial-gradient(1px 1px at 68% 88%,#fff 99%,transparent),radial-gradient(1px 1px at 43% 13%,#fff 99%,transparent); }
+    nav { position:fixed; z-index:3; top:26px; left:50%; transform:translateX(-50%); display:flex; gap:6px; padding:6px; border:1px solid rgba(255,255,255,.11); border-radius:999px; background:rgba(13,15,34,.74); backdrop-filter:blur(14px); white-space:nowrap; }
+    nav a { padding:10px 16px; border-radius:999px; color:#aaaac4; text-decoration:none; font-size:13px; font-weight:600; transition:background .2s,color .2s; }
+    nav a:hover, nav a[aria-current="page"] { color:#fff; background:rgba(255,255,255,.1); }
+    main { position:relative; width:min(1060px,92vw); margin:0 auto; padding:132px 0 88px; text-align:center; animation:rise .8s ease both; }
+    .eyebrow { display:inline-flex; align-items:center; gap:9px; padding:9px 14px; border:1px solid rgba(255,255,255,.12); border-radius:999px; background:rgba(255,255,255,.045); color:#d5d4eb; font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; }
+    .spark { width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 14px var(--cyan); }
+    h1 { margin:24px 0 13px; font:800 clamp(3.3rem,8vw,6rem)/1 'Manrope',sans-serif; letter-spacing:-.08em; }
+    h1 span { color:transparent; background:linear-gradient(100deg,#fff,#cbc2ff 55%,#7ce8f2); background-clip:text; -webkit-background-clip:text; }
+    .intro { max-width:560px; margin:0 auto; color:#c6c4dc; font-size:1.05rem; line-height:1.75; }
+    .gallery { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:44px 0 0; text-align:left; }
+    .tile { position:relative; min-height:230px; display:flex; align-items:flex-end; overflow:hidden; padding:22px; border:1px solid rgba(255,255,255,.13); border-radius:20px; isolation:isolate; background:#171a37; box-shadow:0 20px 55px rgba(0,0,0,.18); transition:transform .25s,border-color .25s; }
+    .tile:hover { transform:translateY(-5px); border-color:rgba(190,180,255,.4); }
+    .tile::before { position:absolute; z-index:-1; inset:0; content:""; transition:transform .5s; }
+    .tile:hover::before { transform:scale(1.06); }
+    .tile:nth-child(1)::before { background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.85) 0 1px,transparent 2px),radial-gradient(circle at 70% 30%,rgba(255,255,255,.7) 0 1px,transparent 2px),radial-gradient(ellipse at 70% 20%,rgba(103,232,249,.48),transparent 35%),linear-gradient(145deg,#342a68,#151630 63%,#0b1024); }
+    .tile:nth-child(2)::before { background:radial-gradient(ellipse at 50% 110%,rgba(255,150,199,.7),transparent 48%),radial-gradient(ellipse at 80% 15%,rgba(167,139,250,.45),transparent 38%),linear-gradient(135deg,#211b48,#13162c); }
+    .tile:nth-child(3)::before { background:radial-gradient(ellipse at 25% 80%,rgba(34,211,238,.43),transparent 42%),radial-gradient(ellipse at 80% 15%,rgba(167,139,250,.44),transparent 40%),linear-gradient(145deg,#182a49,#12152c 70%); }
+    .tile:nth-child(4)::before { background:radial-gradient(circle at 70% 24%,rgba(255,255,255,.8) 0 1px,transparent 2px),radial-gradient(ellipse at 25% 15%,rgba(251,191,36,.35),transparent 32%),linear-gradient(145deg,#3a244b,#181a36 70%); }
+    .tile:nth-child(5)::before { background:radial-gradient(ellipse at 50% 20%,rgba(103,232,249,.4),transparent 38%),radial-gradient(ellipse at 80% 90%,rgba(167,139,250,.45),transparent 42%),linear-gradient(145deg,#172e46,#15162e 70%); }
+    .tile:nth-child(6)::before { background:radial-gradient(circle at 22% 30%,rgba(255,255,255,.75) 0 1px,transparent 2px),radial-gradient(ellipse at 80% 20%,rgba(244,114,182,.42),transparent 38%),linear-gradient(145deg,#302149,#14162f 70%); }
+    .tile::after { position:absolute; z-index:-1; inset:35% 0 0; content:""; background:linear-gradient(transparent,rgba(7,8,22,.82)); }
+    .caption small { display:block; margin-bottom:7px; color:#c4c0e1; font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; }
+    .caption b { font:700 19px 'Manrope',sans-serif; }
+    .footer { padding:0 0 24px; color:#676981; text-align:center; font-size:11px; letter-spacing:.12em; }
+    @keyframes rise { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @media(max-width:720px) { .gallery { grid-template-columns:repeat(2,1fr); gap:13px; } .tile { min-height:200px; } main { padding-top:116px; } }
+    @media(max-width:480px) { nav { top:14px; } nav a { padding:9px 11px; font-size:11px; } .gallery { grid-template-columns:1fr; max-width:390px; margin:32px auto 0; } .tile { min-height:190px; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <nav aria-label="Main navigation">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html" aria-current="page">Gallery</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+  <main>
+    <div class="eyebrow"><span class="spark"></span>A few things to wonder at</div>
+    <h1>Little <span>moments.</span></h1>
+    <p class="intro">A collection of colors, quiet skies, and imagined places. Take a moment and look around.</p>
+    <section class="gallery" aria-label="Gallery of imagined scenes">
+      <article class="tile"><div class="caption"><small>01 / Night sky</small><b>Somewhere among the stars</b></div></article>
+      <article class="tile"><div class="caption"><small>02 / Daydream</small><b>Soft light, new ideas</b></div></article>
+      <article class="tile"><div class="caption"><small>03 / Horizon</small><b>Meet me at the edge</b></div></article>
+      <article class="tile"><div class="caption"><small>04 / Wonder</small><b>A little unexpected</b></div></article>
+      <article class="tile"><div class="caption"><small>05 / Stillness</small><b>Room to breathe</b></div></article>
+      <article class="tile"><div class="caption"><small>06 / Afterglow</small><b>Keep the spark</b></div></article>
+    </section>
+  </main>
+  <div class="footer">MADE WITH A LITTLE SPARK ✦</div>
+</body>
+</html>
